@@ -1,4 +1,5 @@
-import React from 'react'
+'use client';
+import React, { useEffect } from 'react'
 import Image from 'next/image';
 import MemojiImage from '@/assets/images/memoji-computer.png'
 import ArrowDown from '@/assets/icons/arrow-down.svg'
@@ -6,8 +7,26 @@ import grainImage from '@/assets/images/grain.jpg'
 import StarIcon from '@/assets/icons/star.svg'
 import SparkleIcon from '@/assets/icons/sparkle.svg'
 import { HeroOrbit } from '@/components/HeroOrbit';
+import { useAnimate, useInView } from 'motion/react';
 
 export const Hero = () => {
+  const [scope, animate] = useAnimate();
+  const inView = useInView(scope, {
+    once: false,
+  });
+
+  useEffect(() => {
+    if (inView) {
+      animate(
+        '.fade-item',
+        { opacity: 1, y: 0 },
+        { duration: 0.5, delay: (index) => index * 0.2 } // stagger
+      );
+    } else {
+      // Optional: reset so animation can replay
+      animate(".fade-item", { opacity: 0, y: 50 }, { duration: 0 });
+    }
+  }, [inView, animate, scope]);
   return (
     <div className='py-32 md:py-48 lg:py-60 relative z-0 overflow-x-clip'>
       <div className="absolute inset-0 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_70%,transparent)]">
@@ -57,13 +76,18 @@ export const Hero = () => {
           <StarIcon className="size-28 text-emerald-300" />
         </HeroOrbit>
       </div>
-      <div className='container'>
+      <div className='container' ref={scope}>
         <div className='flex flex-col items-center'>
           <Image src={MemojiImage}
-            className="size-[100px]"
-            alt="Person peeking from behind laptop" />
+            className="size-[100px] fade-item"
+            alt="Person peeking from behind laptop"
+            style={{ opacity: 0, transform: 'translateY(20px)' }}
+          />
 
-          <div className='bg-gray-950 border border-gray-800 px-4 py-1.5 inline-flex items-center gap-4 rounded-lg'>
+          <div
+            className='bg-gray-950 border border-gray-800 px-4 py-1.5 inline-flex items-center gap-4 rounded-lg fade-item'
+            style={{ opacity: 0, transform: 'translateY(20px)' }}
+          >
             <div className='bg-green-500 size-2.5 rounded-full relative'>
               <div className="bg-green-500 absolute inset-0 rounded-full animate-ping-large"></div>
             </div>
@@ -71,13 +95,21 @@ export const Hero = () => {
             </div>
           </div>
         </div>
-        <div className='mx-w-lg mx-auto'>
-          <h1 className='font-serif text-3xl md:text-5xl text-center mt-8 tracking-wide'>Building Exceptional User Experiences</h1>
-          <p className='mt-4 text-center text-white/60 md:text-lg'>
+        <div className='mx-w-lg mx-auto'
+        >
+          <h1 className='font-serif text-3xl md:text-5xl text-center mt-8 tracking-wide fade-item'
+            style={{ opacity: 0, transform: 'translateY(20px)' }}
+          >Building Exceptional User Experiences</h1>
+          <p className='mt-4 text-center text-white/60 md:text-lg fade-item'
+            style={{ opacity: 0, transform: 'translateY(20px)' }}
+          >
             I specialize in transforming designs into functional, high-performing web application. let's discuss your next project.
           </p>
         </div>
-        <div className='flex flex-col md:flex-row justify-center items-center mt-8 gap-4'>
+        <div
+          className='flex flex-col md:flex-row justify-center items-center mt-8 gap-4 fade-item'
+          style={{ opacity: 0, transform: 'translateY(20px)' }}
+        >
           <button className='inline-flex items-center gap-2 border border-white/15  px-6 h-12 rounded-xl hover:bg-white/70'>
             <span className='font-semibold'>Explore My Work   </span>
             <ArrowDown className='size-4' />

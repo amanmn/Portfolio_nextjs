@@ -1,3 +1,4 @@
+'use client';
 import darkSaaSLandingPage from "@/assets/images/dark-saas-landing-page.png"
 import lightSaasLandingPage from "@/assets/images/light-saas-landing-page.png"
 import aiStartupLandingPage from "@/assets/images/ai-startup-landing-page.png"
@@ -6,6 +7,8 @@ import ArrowUpRightIcon from "@/assets/icons/arrow-up-right.svg"
 import Image from 'next/image';
 import { SectionHeader } from "@/components/SectionHeader"
 import { Card } from "@/components/Card"
+import { useAnimate, useInView } from 'motion/react';
+import { useEffect, useRef } from "react";
 
 
 const portfolioProjects = [
@@ -48,17 +51,49 @@ const portfolioProjects = [
   },
 ]
 export const Projects = () => {
-  return (
-    <section className="pb-16 lg:py-24">
-      <div className="container">
 
-        <SectionHeader eyebrow="Real-worlds Results" title="Featured Projects" description="See how I transformed concepts into digital experience" />
+  const containerRef = useRef(null);
+  const [scope, animate] = useAnimate();
+  const inView = useInView(scope, {
+    once: false,
+  });
+  const hasAnimatedOnce = useRef(false);
+
+  useEffect(() => {
+    if (inView) {
+      animate(
+        ".fade-item",
+        { opacity: 1, y: 0 },
+        {
+          duration: 0.5,
+          delay: hasAnimatedOnce.current ? 0 : (index) => index * 0.2
+        }
+      );
+      hasAnimatedOnce.current = true;
+    } else {
+      animate(".fade-item", { opacity: 0, y: 50 }, { duration: 0 });
+    }
+  }, [inView, animate, scope]);
+
+  return (
+    <section ref={scope} className="pb-16 lg:py-24">
+      <div className="container" ref={scope}>
+        <SectionHeader
+          eyebrow="Real-worlds Results"
+          title="Featured Projects"
+          description="See how I transformed concepts into digital experience"
+        />
 
         <div className="mt-10 md:mt-20 flex flex-col gap-20 ">
-          {portfolioProjects.map((project) => (
+          {portfolioProjects.map((project, projectIndex) => (
             <Card
               key={project.title}
-              className="px-8 pt-8 pb-0 md:pt-12 md:px-10 lg:pt-16 lg:px-20 ">
+              className="px-8 pt-8 pb-0 md:pt-12 md:px-10 lg:pt-16 lg:px-20 sticky fade-item"
+              style={{
+                top: `calc(64px + ${projectIndex * 40}px`,
+                opacity: 0, transform: 'translateY(0%)'
+              }}
+            >
 
               <div className="lg:grid lg:grid-cols-2 lg:gap-16">
                 <div className="lg:pb-16">
@@ -68,7 +103,7 @@ export const Projects = () => {
                     <span>{project.year}</span>
                   </div>
                   <h3 className="font-serif text-2xl mt-2 md:mt-5 md:text-4xl">{project.title}</h3>
-                  <hr className="border-t-2 border-white/5 mt-4" />
+                  <hr className="border-t-2 border-white/5 mt-4 fade-item" />
                   <ul className="flex flex-col gap-4 mt-4 md:mt-5">
                     {project.results.map((result) => (
                       <li key={result.title} className="flex gap-2 text-sm md:text-base text-white/50">
@@ -78,14 +113,23 @@ export const Projects = () => {
                     ))}
                   </ul>
                   <a href={project.link}>
-                    <button className="bg-white text-gray-950 h-12 w-full md:w-auto px-6 rounded-xl font-semibold inline-flex items-center justify-center gap-2 mt-8">
+                    <button
+                      className="bg-white text-gray-950 h-12 w-full md:w-auto px-6 rounded-xl font-semibold inline-flex items-center justify-center gap-2 mt-8 fade-item"
+                      style={{ opacity: 0, transform: 'translateY(0%)' }}
+                    >
                       <span>Visit live Site</span>
                       <ArrowUpRightIcon className="size-4.1" />
                     </button>
                   </a>
                 </div>
                 <div className="relative">
-                  <Image src={project.image} alt={project.title} className="mt-8 -mb-4 md:-mb-0 lg:mt-0 lg:absolute lg:h-full lg:w-auto lg:max-w-none"
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    className="mt-8 -mb-4 md:-mb-0 lg:mt-0 lg:absolute lg:h-full lg:w-auto lg:max-w-none fade-item "
+                    style={{
+                      opacity: 0, transform: 'translateY(0%)', transitionDelay: "3"
+                    }}
                   />
                 </div>
               </div>
