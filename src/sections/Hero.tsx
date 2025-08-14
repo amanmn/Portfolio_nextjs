@@ -101,9 +101,7 @@ export const Hero = () => {
             style={{ opacity: 0, transform: 'translateY(20px)' }}
           >Building Exceptional User Experiences</h1>
           <p className='mt-4 text-center text-white/60 md:text-lg fade-item'
-            style={{ opacity: 0, transform: 'translateY(20px)' }}
-          >
-            I specialize in transforming designs into functional, high-performing web application. let's discuss your next project.
+            style={{ opacity: 0, transform: 'translateY(20px)' }}>I specialize in transforming designs into functional, high-performing web application. let&apos;s discuss your next project.
           </p>
         </div>
         <div
@@ -116,7 +114,7 @@ export const Hero = () => {
           </button>
           <button className='inline-flex items-center gap-2 border bg-white text-gray-900 hover:bg-white/70 hover:text-gray-900 h-12 px-6 rounded-xl z-10'>
             <span >👋</span>
-            <span>Let's connect</span>
+            <span>Let&apos;s connect</span>
           </button>
         </div>
       </div>

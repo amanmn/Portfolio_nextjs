@@ -1,5 +1,3 @@
-import Image from "next/image";
-import styles from "./page.module.css";
 import { Header } from "@/sections/Header";
 import { Hero } from "@/sections/Hero";
 import { Projects } from "@/sections/Projects";
